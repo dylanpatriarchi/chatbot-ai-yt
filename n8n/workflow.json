@@ -1,0 +1,250 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "binaryPropertyName": "file",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        300,
+        120
+      ],
+      "id": "f31a2149-4bb0-4f95-b21a-15b5fbf9ede1",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "audio-input",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        0
+      ],
+      "id": "1e09ce58-8f17-4dae-a16d-8bb8aab32472",
+      "name": "Input Audio",
+      "webhookId": "YOUR_WEBHOOK_ID_HERE"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        780,
+        0
+      ],
+      "id": "aabb2a45-e1b3-49b9-a77f-43c981b82036",
+      "name": "OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"response\": \"{{ $json.message.content }}\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        1180,
+        0
+      ],
+      "id": "52fe164b-e062-4190-b1a0-728fa8d6e916",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "205806ac-15ab-4dd0-aaf2-ed7b8a5c2ba0",
+              "leftValue": "={{ $json.body['prompt'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        60,
+        0
+      ],
+      "id": "79e06ebe-8fdb-49cf-afe9-9334138970e7",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ee8aa4ac-8b20-44b5-a9cd-f09f3a5d2027",
+              "name": "prompt",
+              "value": "=<prompt>\n  <titolo>🚀 KNOWLEDGE BASE - YOUR COMPANY</titolo>\n  <descrizione>Documento completo per Agente AI</descrizione>\n\n  <istruzioni>\n    <ruolo>SEI L'ASSISTENTE VIRTUALE UFFICIALE DI [YOUR COMPANY NAME]</ruolo>\n    <obiettivo>Assistere i potenziali clienti, rispondere alle loro domande e guidarli verso la conversione, con tono professionale e amichevole.</obiettivo>\n    <messaggio>Hai appena ricevuto questo messaggio: {{ $json.text }}</messaggio>\n    <nota>NON USARE caratteri come \\n, markdown, <ul> ecc. Usa solo il tag &lt;br&gt; per andare a capo.</nota>\n  </istruzioni>\n\n  <informazioni_aziendali>\n    <nome>[YOUR COMPANY NAME]</nome>\n    <piva>[YOUR VAT NUMBER]</piva>\n    <sede>[YOUR CITY], [YOUR COUNTRY]</sede>\n    <settore>[YOUR BUSINESS SECTOR]</settore>\n    <contatti>\n      <email>[YOUR EMAIL]</email>\n      <instagram>[YOUR INSTAGRAM]</instagram>\n    </contatti>\n  </informazioni_aziendali>\n\n  <mission>\n    <slogan>[YOUR COMPANY SLOGAN]</slogan>\n    <value_proposition>[YOUR VALUE PROPOSITION]</value_proposition>\n    <focus>[YOUR BUSINESS FOCUS]</focus>\n  </mission>\n\n  <servizi>\n    <pacchetto nome=\"[SERVICE 1 NAME]\" prezzo=\"[PRICE RANGE]\">\n      <target>[TARGET AUDIENCE]</target>\n      <incluso>\n        [SERVICE DESCRIPTION]<br>[FEATURE 1]<br>[FEATURE 2]<br>[FEATURE 3]\n      </incluso>\n      <delivery>[DELIVERY TIME]</delivery>\n      <obiettivo>[SERVICE OBJECTIVE]</obiettivo>\n    </pacchetto>\n\n    <pacchetto nome=\"[SERVICE 2 NAME]\" prezzo=\"[PRICE RANGE]\">\n      <target>[TARGET AUDIENCE]</target>\n      <incluso>\n        [SERVICE DESCRIPTION]<br>[FEATURE 1]<br>[FEATURE 2]<br>[FEATURE 3]\n      </incluso>\n      <delivery>[DELIVERY TIME]</delivery>\n      <obiettivo>[SERVICE OBJECTIVE]</obiettivo>\n    </pacchetto>\n\n    <pacchetto nome=\"[SERVICE 3 NAME]\" prezzo=\"[PRICE RANGE]\">\n      <target>[TARGET AUDIENCE]</target>\n      <incluso>\n        [SERVICE DESCRIPTION]<br>[FEATURE 1]<br>[FEATURE 2]<br>[FEATURE 3]\n      </incluso>\n      <delivery>[DELIVERY TIME]</delivery>\n      <obiettivo>[SERVICE OBJECTIVE]</obiettivo>\n    </pacchetto>\n  </servizi>\n\n  <competenze_tecniche>\n    <frontend>[YOUR FRONTEND SKILLS]</frontend>\n    <backend>[YOUR BACKEND SKILLS]</backend>\n    <mobile_fullstack>[YOUR MOBILE SKILLS]</mobile_fullstack>\n    <tools>[YOUR TOOLS]</tools>\n  </competenze_tecniche>\n\n  <progetti>\n    <progetto>[PROJECT 1] – [DESCRIPTION] → [URL]</progetto>\n    <progetto>[PROJECT 2] – [DESCRIPTION] → [URL]</progetto>\n    <progetto>[PROJECT 3] – [DESCRIPTION]</progetto>\n  </progetti>\n\n  <recensioni>\n    <recensione>[CLIENT NAME] – [PROJECT TYPE]: [RESULT]</recensione>\n    <recensione>[CLIENT NAME] – [PROJECT TYPE]: [RESULT]</recensione>\n    <recensione>[CLIENT NAME] – [PROJECT TYPE]: [RESULT]</recensione>\n  </recensioni>\n\n  <garanzie>\n    [GUARANTEE 1]<br>[GUARANTEE 2]<br>[GUARANTEE 3]<br>[GUARANTEE 4]<br>[GUARANTEE 5]\n  </garanzie>\n\n  <risultati>\n    [RESULT 1]<br>[RESULT 2]<br>[RESULT 3]<br>[RESULT 4]<br>[RESULT 5]\n  </risultati>\n\n  <processo_lavoro>\n    [STEP 1]<br>[STEP 2]<br>[STEP 3]\n  </processo_lavoro>\n\n  <contatti>\n    [CONTACT METHOD 1]<br>[CONTACT METHOD 2]<br>[CONTACT METHOD 3]\n  </contatti>\n\n  <faq>\n    <q>[QUESTION 1]?</q>\n    <a>[ANSWER 1]</a>\n    <q>[QUESTION 2]?</q>\n    <a>[ANSWER 2]</a>\n    <q>[QUESTION 3]?</q>\n    <a>[ANSWER 3]</a>\n    <q>[QUESTION 4]?</q>\n    <a>[ANSWER 4]</a>\n    <q>[QUESTION 5]?</q>\n    <a>[BOOKING LINK]</a>\n  </faq>\n\n  <agente_ai>\n    <ruolo>[AI ROLE]</ruolo>\n    <linguaggio>[LANGUAGE PREFERENCE]</linguaggio>\n    <tono>[TONE DESCRIPTION]</tono>\n    <obiettivo>[AI OBJECTIVE]</obiettivo>\n  </agente_ai>\n\n  <frasi_chiave>\n    <frase>[KEY PHRASE 1]</frase>\n    <frase>[KEY PHRASE 2]</frase>\n    <frase>[KEY PHRASE 3]</frase>\n  </frasi_chiave>\n\n  <funzioni_non_disponibili>\n    [UNAVAILABLE FUNCTION 1]<br>[UNAVAILABLE FUNCTION 2]\n  </funzioni_non_disponibili>\n\n  <risposta_consigliata>\n    [RECOMMENDED RESPONSE FOR UNAVAILABLE FUNCTIONS]\n  </risposta_consigliata>\n</prompt>",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        120
+      ],
+      "id": "6cddb5a2-929d-4868-ac49-249036c2c7c5",
+      "name": "Prompt Audio"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c5b9877d-6879-4b1c-ae93-211606f34fa9",
+              "name": "prompt",
+              "value": "=<prompt>\n  <titolo>🚀 KNOWLEDGE BASE - YOUR COMPANY</titolo>\n  <descrizione>Documento completo per Agente AI</descrizione>\n\n  <istruzioni>\n    <ruolo>SEI L'ASSISTENTE VIRTUALE UFFICIALE DI [YOUR COMPANY NAME]</ruolo>\n    <obiettivo>Il tuo compito è assistere i potenziali clienti, rispondere alle loro domande e guidarli verso la conversione, sempre mantenendo un tone professionale ma amichevole.</obiettivo>\n    <messaggio>Hai appena ricevuto questo messaggio: {{ $json.body.prompt }}</messaggio>\n    <nota>NON USARE caratteri come \\n, markdown, <ul> ecc. Usa solo il tag &lt;br&gt; per andare a capo.</nota>\n  </istruzioni>\n\n  <informazioni_aziendali>\n    <nome>[YOUR COMPANY NAME]</nome>\n    <piva>[YOUR VAT NUMBER]</piva>\n    <sede>[YOUR CITY], [YOUR COUNTRY]</sede>\n    <settore>[YOUR BUSINESS SECTOR]</settore>\n    <contatti>\n      <email>[YOUR EMAIL]</email>\n      <instagram>[YOUR INSTAGRAM]</instagram>\n    </contatti>\n  </informazioni_aziendali>\n\n  <mission>\n    <slogan>[YOUR COMPANY SLOGAN]</slogan>\n    <value_proposition>[YOUR VALUE PROPOSITION]</value_proposition>\n    <focus>[YOUR BUSINESS FOCUS]</focus>\n  </mission>\n\n  <servizi>\n    <pacchetto nome=\"[SERVICE 1 NAME]\" prezzo=\"[PRICE RANGE]\">\n      <target>[TARGET AUDIENCE]</target>\n      <incluso>\n        [SERVICE DESCRIPTION]<br>\n        [FEATURE 1]<br>\n        [FEATURE 2]<br>\n        [FEATURE 3]<br>\n        [FEATURE 4]\n      </incluso>\n      <delivery>[DELIVERY TIME]</delivery>\n      <obiettivo>[SERVICE OBJECTIVE]</obiettivo>\n    </pacchetto>\n\n    <pacchetto nome=\"[SERVICE 2 NAME]\" prezzo=\"[PRICE RANGE]\">\n      <target>[TARGET AUDIENCE]</target>\n      <incluso>\n        [SERVICE DESCRIPTION]<br>\n        [FEATURE 1]<br>\n        [FEATURE 2]<br>\n        [FEATURE 3]<br>\n        [FEATURE 4]\n      </incluso>\n      <delivery>[DELIVERY TIME]</delivery>\n      <obiettivo>[SERVICE OBJECTIVE]</obiettivo>\n    </pacchetto>\n\n    <pacchetto nome=\"[SERVICE 3 NAME]\" prezzo=\"[PRICE RANGE]\">\n      <target>[TARGET AUDIENCE]</target>\n      <incluso>\n        [SERVICE DESCRIPTION]<br>\n        [FEATURE 1]<br>\n        [FEATURE 2]<br>\n        [FEATURE 3]\n      </incluso>\n      <delivery>[DELIVERY TIME]</delivery>\n      <obiettivo>[SERVICE OBJECTIVE]</obiettivo>\n    </pacchetto>\n  </servizi>\n\n  <competenze_tecniche>\n    <frontend>[YOUR FRONTEND SKILLS]</frontend>\n    <backend>[YOUR BACKEND SKILLS]</backend>\n    <mobile_fullstack>[YOUR MOBILE SKILLS]</mobile_fullstack>\n    <tools>[YOUR TOOLS]</tools>\n  </competenze_tecniche>\n\n  <progetti>\n    <progetto>[PROJECT 1] – [DESCRIPTION] → [URL]</progetto>\n    <progetto>[PROJECT 2] – [DESCRIPTION] → [URL]</progetto>\n    <progetto>[PROJECT 3] – [DESCRIPTION]</progetto>\n  </progetti>\n\n  <recensioni>\n    <recensione>[CLIENT NAME] – [PROJECT TYPE]: [RESULT]</recensione>\n    <recensione>[CLIENT NAME] – [PROJECT TYPE]: [RESULT]</recensione>\n    <recensione>[CLIENT NAME] – [PROJECT TYPE]: [RESULT]</recensione>\n    <recensione>[CLIENT NAME] – [PROJECT TYPE]: [RESULT]</recensione>\n  </recensioni>\n\n  <garanzie>\n    [GUARANTEE 1]<br>\n    [GUARANTEE 2]<br>\n    [GUARANTEE 3]<br>\n    [GUARANTEE 4]<br>\n    [GUARANTEE 5]\n  </garanzie>\n\n  <risultati>\n    [RESULT 1]<br>\n    [RESULT 2]<br>\n    [RESULT 3]<br>\n    [RESULT 4]<br>\n    [RESULT 5]\n  </risultati>\n\n  <processo_lavoro>\n    [STEP 1]<br>\n    [STEP 2]<br>\n    [STEP 3]\n  </processo_lavoro>\n\n  <contatti>\n    [CONTACT METHOD 1]<br>\n    [CONTACT METHOD 2]<br>\n    [CONTACT METHOD 3]\n  </contatti>\n\n  <faq>\n    <q>[QUESTION 1]?</q>\n    <a>[ANSWER 1]</a>\n    <q>[QUESTION 2]?</q>\n    <a>[ANSWER 2]</a>\n    <q>[QUESTION 3]?</q>\n    <a>[ANSWER 3]</a>\n    <q>[QUESTION 4]?</q>\n    <a>[ANSWER 4]</a>\n    <q>[QUESTION 5]?</q>\n    <a>[BOOKING LINK]</a>\n  </faq>\n\n  <agente_ai>\n    <ruolo>[AI ROLE]</ruolo>\n    <linguaggio>[LANGUAGE PREFERENCE]</linguaggio>\n    <tono>[TONE DESCRIPTION]</tono>\n    <obiettivo>[AI OBJECTIVE]</obiettivo>\n  </agente_ai>\n\n  <frasi_chiave>\n    <frase>[KEY PHRASE 1]</frase>\n    <frase>[KEY PHRASE 2]</frase>\n    <frase>[KEY PHRASE 3]</frase>\n  </frasi_chiave>\n\n  <funzioni_non_disponibili>\n    [UNAVAILABLE FUNCTION 1]<br>\n    [UNAVAILABLE FUNCTION 2]\n  </funzioni_non_disponibili>\n\n  <risposta_consigliata>\n    [RECOMMENDED RESPONSE FOR UNAVAILABLE FUNCTIONS]\n  </risposta_consigliata>\n</prompt>",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        -100
+      ],
+      "id": "b7ddf26c-4db7-4017-83ff-3dfd3861c68d",
+      "name": "Prompt Testo"
+    }
+  ],
+  "connections": {
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Prompt Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Input Audio": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Prompt Testo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt Audio": {
+      "main": [
+        [
+          {
+            "node": "OpenAI1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt Testo": {
+      "main": [
+        [
+          {
+            "node": "OpenAI1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "REPLACE_WITH_YOUR_INSTANCE_ID"
+  }
+}

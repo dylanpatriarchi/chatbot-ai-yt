@@ -1,0 +1,15 @@
+.app-content {
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.app-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 300;
+}
+
+.app-content p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+} 

@@ -1,0 +1,92 @@
+.chat-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.chat-window-container {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  animation: slideUp 0.3s ease-out;
+}
+
+.chat-toggle-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  border: none;
+  background: rgba(0, 122, 255, 1);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0, 122, 255, 0.25), 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.chat-toggle-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 40px rgba(0, 122, 255, 0.35), 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: rgba(0, 122, 255, 0.9);
+}
+
+.chat-toggle-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3), 0 1px 4px rgba(0, 0, 0, 0.1);
+  animation: tapFeedback 0.15s ease-out;
+}
+
+.chat-toggle-btn.open {
+  background: rgba(255, 59, 48, 1);
+  box-shadow: 0 8px 32px rgba(255, 59, 48, 0.25), 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.chat-toggle-btn.open:hover {
+  background: rgba(255, 59, 48, 0.9);
+  box-shadow: 0 12px 40px rgba(255, 59, 48, 0.35), 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Animazione di feedback tattile */
+@keyframes tapFeedback {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+
+
+/* Ripple effect in stile Cupertino */
+.chat-toggle-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translate(-50%, -50%);
+}
+
+.chat-toggle-btn:active::before {
+  width: 56px;
+  height: 56px;
+} 
