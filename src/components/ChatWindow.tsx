@@ -101,7 +101,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
       const formData = new FormData();
       formData.append('prompt', inputText);
 
-      const response = await fetch('https://TUO-N8N-URL/webhook-test/audio-input', {
+      const response = await fetch('https://dylanpatriarchi.app.n8n.cloud/webhook-test/audio-input', {
         method: 'POST',
         body: formData
       });
@@ -181,7 +181,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
       const formData = new FormData();
       formData.append('file', audioBlob, 'input.m4a');
 
-      const response = await fetch('https://TUO-N8N-URL/webhook-test/audio-input', {
+      const response = await fetch('https://dylanpatriarchi.app.n8n.cloud/webhook-test/audio-input', {
         method: 'POST',
         body: formData
       });
